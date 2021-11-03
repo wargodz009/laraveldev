@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\sendSignupMail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,5 +18,9 @@ Route::post('/generate-link', function (\Illuminate\Http\Request $request) {
 
     $request->validate(['email'=>'required|email']);
 
-    \App\Jobs\sendSignupMail::dispatch(URL::signedRoute('signup'),$request->get('email'));
+    sendSignupMail::dispatch(URL::signedRoute('signup'),$request->get('email'));
+
+    return response()->json(['success'=>true]);
 });
+
+Route::apiResource('profile',\App\Http\Controllers\ProfileController::class);

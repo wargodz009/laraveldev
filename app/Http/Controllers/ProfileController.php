@@ -43,7 +43,10 @@ class ProfileController extends Controller
             return response()->json($validator->errors());
         }
 
-        return response()->json(Profile::create($validator->validated()));
+        $data = $validator->validated();
+        $data['avatar'] = $request->avatar->getClientOriginalName();
+
+        return response()->json(Profile::create($data));
     }
 
     /**
@@ -83,9 +86,11 @@ class ProfileController extends Controller
             return response()->json($validator->errors());
         }
 
+        $data = $validator->validated();
+        $data['avatar'] = $request->avatar->getClientOriginalName();
         $profile = Profile::findOrFail($id);
 
-        $profile->update($validator->validated());
+        $profile->update($data);
 
         return response()->json($profile);
     }
